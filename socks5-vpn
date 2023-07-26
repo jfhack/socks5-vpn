@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+import argparse
+from core.create import Create
+from core.start import Start
+from core.stop import Stop
+from core.remove import Remove
+from core.list import List
+from core.install import Install
+from core.get import Get
+
+def main():
+  parser = argparse.ArgumentParser(
+    description="A simple script that allows to create a Socks5 proxy over a VPN connection using Docker",
+    formatter_class=argparse.RawDescriptionHelpFormatter
+  )
+
+  subparsers = parser.add_subparsers()
+
+  aliases = [["new"], [], [], ["rm"], []]
+  for i, command in enumerate(['create', 'start', 'stop', 'remove', 'get']):
+    subparser = subparsers.add_parser(command, aliases=aliases[i], help=f"{command} a VPN configuration")
+    subparser.add_argument("name", help="the name of the VPN configuration")
+    subparser.set_defaults(command=command)
+    if command == 'stop':
+      subparser.add_argument("-f", "--force", help="force stop", action="store_true")
+    if command == 'get':
+      subparser.add_argument("-p", "--port", help="get the port (full address:port if it was configured in this way) of the VPN configuration", action="store_true")
+      subparser.add_argument("-n", "--port-number", help="get the port number of the VPN configuration", action="store_true")
+  
+  subparser = subparsers.add_parser("list", aliases=["ls"], help="list configurations")
+  subparser.set_defaults(command="list")
+
+  subparser = subparsers.add_parser("install", help="put a symbolic link of this script into a writable PATH directory")
+  subparser.set_defaults(command="install")
+
+  args = parser.parse_args()
+  try:
+    if hasattr(args, "command"):
+      if args.command == 'create':
+        Create(args.name)
+      elif args.command == 'start':
+        Start(args.name)
+      elif args.command == 'stop':
+        Stop(args.name, args.force)
+      elif args.command == 'remove':
+        Remove(args.name)
+      elif args.command == 'list':
+        List()
+      elif args.command == 'install':
+        Install(__file__)
+      elif args.command == 'get':
+        Get(args.name, args)
+    else:
+      parser.print_help()
+
+  except KeyboardInterrupt:
+    print("\nAborted")
+
+if __name__ == "__main__":
+  main()

@@ -1,0 +1,54 @@
+services:
+  vpn:
+    container_name: vpn-gateway
+    image: dperson/openvpn-client
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:1080:1080
+    # dns:
+    #   - 8.8.8.8
+    #   - 8.8.4.4
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - '/dev/net/tun:/dev/net/tun:rwm'
+    environment:
+      FIREWALL: ''    # If you use different VPN ports then default 1194 add them in here, otherwise leave it empty as is.
+     #VPN 'server_address;user;password;port'    # Configure VPN server address, authentication and port if needed by your VPN provider (port value is optional) we will use an external config file for this, leave commented as is.
+      PUID: 1000
+      PGID: 1000
+      # TZ: America/Santiago
+      # ROUTE: '192.168.1.0/24'    # Specify subnet of your home LAN in order to connect into the container behind VPN - if you don't, containers will work but you wont be able to connect to them locally.
+    networks:
+      network:
+        ipv4_address: 10.5.0.5
+    read_only: true
+    tmpfs:
+      - /run
+      - /tmp
+    security_opt:
+      - label:disable
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./vpn:/vpn
+      - /etc/timezone:/etc/timezone:ro
+  
+  socks5:
+    container_name: socks5
+    image: serjs/go-socks5-proxy
+    restart: unless-stopped
+    depends_on:
+      - vpn
+    network_mode: service:vpn
+    # environment:
+    #   - PROXY_USER=user
+    #   - PROXY_PASSWORD=password
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/24
+          gateway: 10.5.0.1
