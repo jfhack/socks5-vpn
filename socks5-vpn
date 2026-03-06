@@ -29,6 +29,7 @@ def main():
   
   subparser = subparsers.add_parser("list", aliases=["ls"], help="list configurations")
   subparser.set_defaults(command="list")
+  subparser.add_argument("-p", "--port", help="get the port (full address:port if it was configured in this way) of the VPN configuration", action="store_true")
 
   subparser = subparsers.add_parser("install", help="put a symbolic link of this script into a writable PATH directory")
   subparser.set_defaults(command="install")
@@ -45,7 +46,7 @@ def main():
       elif args.command == 'remove':
         Remove(args.name)
       elif args.command == 'list':
-        List()
+        List(args)
       elif args.command == 'install':
         Install(__file__)
       elif args.command == 'get':

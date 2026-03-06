@@ -35,6 +35,7 @@ Now, you can execute the script `./socks5-vpn`
 ||-p, --port|get the port (full address:port if it was configured in this way) of the VPN configuration|
 ||-n, --port-number|get the port number of the VPN configuration|
 |list, ls||list configurations|
+||-p, --port|get the port (full address:port if it was configured in this way) of the VPN configuration|
 |install||put a symbolic link of this script into a writable PATH directory|
 
 ### Creating a Configuration
@@ -57,6 +58,7 @@ Examples:
   0.0.0.0:1080
   127.0.0.1:1080
 You will use this port to connect to the socks5 proxy
+You can run command 'socks5-vpn ls -p' to see the other ports and make sure your ports don't conflict
 Socks5 port [127.0.0.1:1080]: 127.0.0.1:7500
 Do you want to use user and password for this proxy? [y/N]: 
 No user and password will be used

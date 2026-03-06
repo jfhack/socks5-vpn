@@ -4,16 +4,18 @@ from core import util, db
 import yaml
 
 class Get:
-  def __init__(self, name, args):
+  def __init__(self, name, args, show=True):
     self.name = name
     self.args = args
+    self.show = show
     self.config_dir = util.config_dir.joinpath(self.name)
 
-    if self.config_dir.exists():
-      self.get()
-    else:
-      print(f"ERROR: {self.name} does not exist")
-      exit(1)
+    if self.show:
+      if self.config_dir.exists():
+        self.get()
+      else:
+        print(f"ERROR: {self.name} does not exist")
+        exit(1)
 
   def get_all(self):
     table = []

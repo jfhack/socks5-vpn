@@ -117,6 +117,7 @@ class Create:
           print("  0.0.0.0:1080")
           print("  127.0.0.1:1080")
           print("You will use this port to connect to the socks5 proxy")
+          print("You can run command 'socks5-vpn ls -p' to see the other ports and make sure your ports don't conflict")
           original_default_port = default_port
           while True:
             default_port = input(f"Socks5 port [{default_port}]: ") or default_port
