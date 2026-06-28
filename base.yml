@@ -41,9 +41,10 @@ services:
     depends_on:
       - vpn
     network_mode: service:vpn
-    # environment:
-    #   - PROXY_USER=user
-    #   - PROXY_PASSWORD=password
+    environment:
+      - REQUIRE_AUTH=false
+      # - PROXY_USER=user
+      # - PROXY_PASSWORD=password
 
 networks:
   network:
