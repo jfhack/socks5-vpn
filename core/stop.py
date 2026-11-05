@@ -5,7 +5,7 @@ import subprocess
 class Stop:
   def __init__(self, name, force=False):
     self.name = name
-    self.config_dir = util.config_dir.joinpath(self.name)
+    self.config_dir = util.config_path(self.name)
     if self.config_dir.exists():
       self.stop(force)
     else:

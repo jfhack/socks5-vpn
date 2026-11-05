@@ -7,7 +7,7 @@ import time
 class Start:
   def __init__(self, name):
     self.name = name
-    self.config_dir = util.config_dir.joinpath(self.name)
+    self.config_dir = util.config_path(self.name)
 
     if self.config_dir.exists():
       self.start()
@@ -24,11 +24,11 @@ class Start:
     time.sleep(config.get("start_delay", 2))
 
   def get_config(self):
-    config = dict()
+    config = None
     try:
-      with open(self.config_dir.joinpath("config.yml"), 'w') as config_file:
+      with open(self.config_dir.joinpath("config.yml"), 'r') as config_file:
         config = yaml.safe_load(config_file)
-    except:
+    except (OSError, yaml.YAMLError):
       pass
-    return config
+    return config if isinstance(config, dict) else dict()
 

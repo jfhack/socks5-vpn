@@ -7,6 +7,7 @@ from core.remove import Remove
 from core.list import List
 from core.install import Install
 from core.get import Get
+from core import util
 
 def main():
   parser = argparse.ArgumentParser(
@@ -54,6 +55,11 @@ def main():
     else:
       parser.print_help()
 
+  except util.InvalidConfigName as e:
+    print(f"Error: Invalid name {str(e)!r}")
+    print("Valid characters are: a-z, A-Z, 0-9, _ and -")
+    print("It will be used as the name of the directory and part of the Docker container name")
+    exit(1)
   except KeyboardInterrupt:
     print("\nAborted")
 

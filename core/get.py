@@ -8,7 +8,7 @@ class Get:
     self.name = name
     self.args = args
     self.show = show
-    self.config_dir = util.config_dir.joinpath(self.name)
+    self.config_dir = util.config_path(self.name)
 
     if self.show:
       if self.config_dir.exists():

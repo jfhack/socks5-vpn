@@ -6,8 +6,12 @@ import shutil
 class Remove:
   def __init__(self, name):
     self.name = name
-    self.config_dir = util.config_dir.joinpath(self.name)
-    self.remove()
+    self.config_dir = util.config_path(self.name)
+    if self.config_dir.is_dir():
+      self.remove()
+    else:
+      print(f"ERROR: {self.name} does not exist")
+      exit(1)
 
   def remove(self):
     self.db = db.DBCounter(self.config_dir.joinpath("counter.db"))

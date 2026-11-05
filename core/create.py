@@ -8,27 +8,18 @@ from core import util
 class Create:
   def __init__(self, name):
     self.name = name
-    if not self.valid_config_name(name):
-      print("Error: Invalid name")
-      print("Valid characters are: a-z, A-Z, 0-9, _ and -")
-      print("It will be used as the name of the directory and part of the Docker container name")
-      exit(1)
+    self.config_dir = util.config_path(name)
     self.create_directory()
     self.create_config()
 
-  def valid_config_name(self, name):
-    return re.match(r"^[a-zA-Z0-9_-]+$", name)
-  
   def create_directory(self):
     util.config_dir.mkdir(parents=True, exist_ok=True)
-    if exist := util.config_dir.joinpath(self.name).exists():
+    if exist := self.config_dir.exists():
       print(f"Warning: {self.name} already exists")
 
-    util.config_dir.joinpath(self.name).mkdir(parents=True, exist_ok=True)
+    self.config_dir.mkdir(parents=True, exist_ok=True)
     if not exist:
       print(f"Created {self.name} directory")
-    
-    self.config_dir = util.config_dir.joinpath(self.name)
 
   def get_network(self, cidr):
     gateway = None
